@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,8 +15,65 @@ interface NominaModuleProps {
 }
 
 export default function NominaModule({ empleados, onUpdate, empresa }: NominaModuleProps) {
-  const [editingId, setEditingId] = useState<string | null>(null);
   const [nombreInputs, setNombreInputs] = useState<Record<string, string>>({});
+
+  const normalizeFullName = (value: string) => value.replace(/\s+/g, " ").trim();
+
+  const splitFullName = (
+    fullName: string,
+    previous?: Pick<Empleado, "apellidos" | "nombres">
+  ): Pick<Empleado, "apellidos" | "nombres"> => {
+    const parts = fullName.split(" ");
+
+    if (parts.length === 1) {
+      return { apellidos: parts[0], nombres: "" };
+    }
+
+    const previousApellidosCount = previous?.apellidos
+      ? previous.apellidos.trim().split(/\s+/).length
+      : 0;
+    const previousNombresCount = previous?.nombres
+      ? previous.nombres.trim().split(/\s+/).length
+      : 0;
+    const previousTotal = previousApellidosCount + previousNombresCount;
+
+    if (
+      previousApellidosCount > 0 &&
+      previousNombresCount > 0 &&
+      previousTotal <= parts.length
+    ) {
+      const apellidos = parts.slice(0, previousApellidosCount).join(" ");
+      const nombres = parts.slice(previousApellidosCount).join(" ");
+      return { apellidos, nombres };
+    }
+
+    if (parts.length === 2) {
+      return { apellidos: parts[0], nombres: parts[1] };
+    }
+
+    const defaultApellidosCount = Math.min(2, parts.length - 1);
+    const apellidos = parts.slice(0, defaultApellidosCount).join(" ");
+    const nombres = parts.slice(defaultApellidosCount).join(" ");
+
+    return { apellidos, nombres };
+  };
+
+  useEffect(() => {
+    setNombreInputs((current) => {
+      const validIds = new Set(empleados.map((emp) => emp.id));
+      let changed = false;
+      const next = { ...current };
+
+      Object.keys(next).forEach((id) => {
+        if (!validIds.has(id)) {
+          delete next[id];
+          changed = true;
+        }
+      });
+
+      return changed ? next : current;
+    });
+  }, [empleados]);
 
   const calcularAplicaFondoReserva = (fechaIngreso: string): boolean => {
     if (!fechaIngreso) return false;
@@ -72,6 +129,12 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
 
   const handleDelete = (id: string) => {
     onUpdate(empleados.filter((emp) => emp.id !== id));
+    setNombreInputs((current) => {
+      if (current[id] === undefined) return current;
+      const next = { ...current };
+      delete next[id];
+      return next;
+    });
   };
 
   return (
@@ -115,34 +178,38 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                   <td className="p-4 text-sm">{index + 1}</td>
                   <td className="p-4">
                     <Input
-                      value={nombreInputs[empleado.id] !== undefined ? nombreInputs[empleado.id] : `${empleado.apellidos} ${empleado.nombres}`.trim()}
+                      value={
+                        nombreInputs[empleado.id] !== undefined
+                          ? nombreInputs[empleado.id]
+                          : `${empleado.apellidos} ${empleado.nombres}`.trim()
+                      }
                       onChange={(e) => {
                         const value = e.target.value;
-                        setNombreInputs({ ...nombreInputs, [empleado.id]: value });
+                        setNombreInputs((current) => ({
+                          ...current,
+                          [empleado.id]: value,
+                        }));
                       }}
                       onBlur={(e) => {
-                        const fullName = e.target.value.replace(/\s+/g, " ").trim();
+                        const fullName = normalizeFullName(e.target.value);
 
                         if (fullName === "") {
                           updateEmpleado(empleado.id, { apellidos: "", nombres: "" });
-                        } else {
-                          const nameParts = fullName.split(" ");
-
-                          if (nameParts.length === 1) {
-                            updateEmpleado(empleado.id, { apellidos: nameParts[0], nombres: "" });
-                          } else {
-                            updateEmpleado(empleado.id, {
-                              apellidos: nameParts.slice(0, -1).join(" "),
-                              nombres: nameParts.slice(-1).join(" "),
-                            });
-                          }
+                          setNombreInputs((current) => {
+                            const next = { ...current };
+                            delete next[empleado.id];
+                            return next;
+                          });
+                          return;
                         }
 
-                        setNombreInputs((current) => {
-                          const newInputs = { ...current };
-                          delete newInputs[empleado.id];
-                          return newInputs;
-                        });
+                        const parsed = splitFullName(fullName, empleado);
+                        updateEmpleado(empleado.id, parsed);
+
+                        setNombreInputs((current) => ({
+                          ...current,
+                          [empleado.id]: fullName,
+                        }));
                       }}
                       className="h-10 text-sm min-w-[250px]"
                       placeholder="Apellidos Nombres"
