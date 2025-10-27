@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatosConfig } from "@/types/nomina";
 import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const MESES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -33,6 +34,10 @@ export default function DatosModule({
 
   const isLanding = variant === "landing";
 
+  useEffect(() => {
+    setLocalDatos(datos);
+  }, [datos]);
+
   const handleChange = (field: keyof DatosConfig, value: string) => {
     const updated = { ...localDatos, [field]: value };
 
@@ -50,6 +55,11 @@ export default function DatosModule({
     }
   };
 
+  const baseInputClasses = "h-12 w-full text-base rounded-2xl bg-background transition";
+  const landingInputClasses =
+    "border-emerald-100 bg-white/90 shadow-sm focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:border-emerald-400";
+  const standardInputClasses = "border-muted";
+
   const formFields = (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -61,7 +71,10 @@ export default function DatosModule({
           value={localDatos.empresa}
           onChange={(e) => handleChange("empresa", e.target.value)}
           placeholder="Ingrese el nombre de su empresa"
-          className="h-12 text-base rounded-xl"
+          className={cn(
+            baseInputClasses,
+            isLanding ? landingInputClasses : standardInputClasses,
+          )}
         />
       </div>
 
@@ -71,7 +84,14 @@ export default function DatosModule({
             Mes del período
           </Label>
           <Select value={localDatos.mes} onValueChange={(value) => handleChange("mes", value)}>
-            <SelectTrigger id="mes" className="h-12 text-base rounded-xl">
+            <SelectTrigger
+              id="mes"
+              className={cn(
+                baseInputClasses,
+                "justify-between",
+                isLanding ? landingInputClasses : standardInputClasses,
+              )}
+            >
               <SelectValue placeholder="Seleccione mes" />
             </SelectTrigger>
             <SelectContent>
@@ -93,7 +113,10 @@ export default function DatosModule({
             type="date"
             value={localDatos.fechaCorte}
             onChange={(e) => handleChange("fechaCorte", e.target.value)}
-            className="h-12 text-base rounded-xl"
+            className={cn(
+              baseInputClasses,
+              isLanding ? landingInputClasses : standardInputClasses,
+            )}
           />
         </div>
       </div>
@@ -111,7 +134,7 @@ export default function DatosModule({
       <div
         className={
           isLanding
-            ? "flex items-center justify-between rounded-2xl border border-muted bg-muted/60 px-6 py-4"
+            ? "flex items-center justify-between rounded-3xl border border-emerald-100 bg-emerald-50/70 px-6 py-4 shadow-sm"
             : "flex items-center justify-between p-4 bg-muted rounded-lg"
         }
       >
@@ -123,7 +146,10 @@ export default function DatosModule({
         <Button
           onClick={handleContinue}
           size="lg"
-          className="w-full h-12 text-base gap-2 rounded-xl"
+          className={cn(
+            "w-full h-12 text-base gap-2 rounded-2xl",
+            isLanding ? "bg-emerald-500 hover:bg-emerald-600" : "",
+          )}
         >
           Continuar a Nómina
           <ArrowRight className="h-5 w-5" />
@@ -132,7 +158,7 @@ export default function DatosModule({
         <div
           className={
             isLanding
-              ? "rounded-xl border border-dashed border-muted px-6 py-4 text-center"
+              ? "rounded-3xl border border-dashed border-emerald-200 bg-emerald-50/70 px-6 py-4 text-center"
               : "p-4 bg-muted/50 border border-dashed rounded-lg"
           }
         >
@@ -147,16 +173,19 @@ export default function DatosModule({
   if (isLanding) {
     return (
       <div className="space-y-10">
-        <header className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600">
-            Bienvenido
+        <header className="space-y-3 text-center md:text-left">
+          <p className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            Configuración
           </p>
-          <h1 className="text-3xl font-bold text-foreground md:text-4xl">
-            Sistema de Gestión de Nómina
-          </h1>
-          <p className="text-base text-muted-foreground">
-            Configure los datos generales del período de la nómina
-          </p>
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold text-foreground md:text-4xl">
+              Configura tu período de nómina
+            </h1>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              Completa los datos iniciales para comenzar a gestionar los roles de pago de tu empresa.
+            </p>
+          </div>
         </header>
 
         {formFields}
