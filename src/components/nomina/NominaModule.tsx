@@ -91,8 +91,12 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
             <thead>
               <tr className="border-b bg-muted">
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap">No.</th>
-                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[200px]">Apellidos</th>
-                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[200px]">Nombres</th>
+                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[260px]">
+                  Nombre Completo
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    (Apellidos y Nombres)
+                  </span>
+                </th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[150px]">Cédula</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Cargo</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Asignación</th>
@@ -111,20 +115,20 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                 <tr key={empleado.id} className="border-b hover:bg-muted/50">
                   <td className="p-4 text-sm">{index + 1}</td>
                   <td className="p-4">
-                    <Input
-                      value={empleado.apellidos}
-                      onChange={(e) => updateEmpleado(empleado.id, { apellidos: e.target.value })}
-                      className="h-10 text-sm min-w-[200px]"
-                      placeholder="Apellidos"
-                    />
-                  </td>
-                  <td className="p-4">
-                    <Input
-                      value={empleado.nombres}
-                      onChange={(e) => updateEmpleado(empleado.id, { nombres: e.target.value })}
-                      className="h-10 text-sm min-w-[200px]"
-                      placeholder="Nombres"
-                    />
+                    <div className="grid min-w-[260px] gap-2 sm:grid-cols-2">
+                      <Input
+                        value={empleado.apellidos ?? ""}
+                        onChange={(e) => updateEmpleado(empleado.id, { apellidos: e.target.value })}
+                        className="h-10 text-sm"
+                        placeholder="Apellidos"
+                      />
+                      <Input
+                        value={empleado.nombres ?? ""}
+                        onChange={(e) => updateEmpleado(empleado.id, { nombres: e.target.value })}
+                        className="h-10 text-sm"
+                        placeholder="Nombres"
+                      />
+                    </div>
                   </td>
                   <td className="p-4">
                     <Input
