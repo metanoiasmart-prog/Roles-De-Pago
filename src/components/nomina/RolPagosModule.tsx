@@ -150,9 +150,9 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Anticipo Sueldo</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Ret. Relacion Dependencia</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Aporte IESS</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Otros</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Otros Descuentos</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Préstamos IESS</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Total Desc.</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Total Descuentos</th>
                 <th className="p-3 text-right border-r whitespace-nowrap min-w-[120px]">Subtotal</th>
 
                 {/* LIQUIDACIÓN */}
