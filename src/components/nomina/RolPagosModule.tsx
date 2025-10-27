@@ -108,27 +108,25 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
   };
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-          Rol de Pagos
-        </h2>
-        <p className="text-sm text-muted-foreground font-medium">
+        <h2 className="text-2xl font-bold mb-1">Rol de Pagos</h2>
+        <p className="text-sm text-muted-foreground">
           {datos.empresa} - {datos.mes}
         </p>
       </div>
 
-      <Card className="shadow-large border overflow-hidden">
+      <Card className="border">
         <div className="overflow-x-auto">
           <table className="w-full text-sm min-w-max">
             <thead>
-              <tr className="border-b bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm">
-                <th colSpan={5} className="text-center p-4 font-bold border-r text-base">DATOS</th>
-                <th colSpan={7} className="text-center p-4 font-bold border-r text-base">INGRESOS</th>
-                <th colSpan={7} className="text-center p-4 font-bold border-r text-base">DESCUENTOS</th>
-                <th colSpan={4} className="text-center p-4 font-bold text-base">LIQUIDACIÓN</th>
+              <tr className="border-b bg-muted">
+                <th colSpan={5} className="text-center p-3 font-bold border-r">DATOS</th>
+                <th colSpan={7} className="text-center p-3 font-bold border-r">INGRESOS</th>
+                <th colSpan={7} className="text-center p-3 font-bold border-r">DESCUENTOS</th>
+                <th colSpan={4} className="text-center p-3 font-bold">LIQUIDACIÓN</th>
               </tr>
-              <tr className="border-b bg-gradient-to-r from-primary/5 to-accent/5 text-xs font-semibold">
+              <tr className="border-b bg-muted text-xs">
                 {/* DATOS */}
                 <th className="p-3 text-left whitespace-nowrap">No.</th>
                 <th className="p-3 text-left whitespace-nowrap min-w-[200px]">Nombre</th>
@@ -167,7 +165,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 if (!row) return null;
 
                 return (
-                  <tr key={empleado.id} className="border-b hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 transition-all duration-200">
+                  <tr key={empleado.id} className="border-b hover:bg-muted/50">
                     {/* DATOS */}
                     <td className="p-3">{index + 1}</td>
                     <td className="p-3 font-medium">{`${empleado.apellidos} ${empleado.nombres}`}</td>
@@ -178,7 +176,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.diasTrabajados === 0 ? "" : row.diasTrabajados}
                         onChange={(e) => handleUpdate(empleado.id, "diasTrabajados", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[100px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[100px]"
                         placeholder="0"
                       />
                     </td>
@@ -190,7 +188,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.horas50 === 0 ? "" : row.horas50}
                         onChange={(e) => handleUpdate(empleado.id, "horas50", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[100px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[100px]"
                         placeholder="0"
                       />
                     </td>
@@ -199,7 +197,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.horas100 === 0 ? "" : row.horas100}
                         onChange={(e) => handleUpdate(empleado.id, "horas100", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[100px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[100px]"
                         placeholder="0"
                       />
                     </td>
@@ -208,7 +206,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.bonificacion === 0 ? "" : row.bonificacion}
                         onChange={(e) => handleUpdate(empleado.id, "bonificacion", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[120px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[120px]"
                         step="0.01"
                         placeholder="0.00"
                       />
@@ -218,7 +216,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.viaticos === 0 ? "" : row.viaticos}
                         onChange={(e) => handleUpdate(empleado.id, "viaticos", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[120px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[120px]"
                         step="0.01"
                         placeholder="0.00"
                       />
@@ -232,7 +230,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.prestamosEmpleado === 0 ? "" : row.prestamosEmpleado}
                         onChange={(e) => handleUpdate(empleado.id, "prestamosEmpleado", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[130px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[130px]"
                         step="0.01"
                         placeholder="0.00"
                       />
@@ -242,7 +240,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.anticipoSueldo === 0 ? "" : row.anticipoSueldo}
                         onChange={(e) => handleUpdate(empleado.id, "anticipoSueldo", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[120px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[120px]"
                         step="0.01"
                         placeholder="0.00"
                       />
@@ -252,7 +250,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.retencionRenta === 0 ? "" : row.retencionRenta}
                         onChange={(e) => handleUpdate(empleado.id, "retencionRenta", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[120px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[120px]"
                         step="0.01"
                         placeholder="0.00"
                       />
@@ -263,7 +261,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.otrosDescuentos === 0 ? "" : row.otrosDescuentos}
                         onChange={(e) => handleUpdate(empleado.id, "otrosDescuentos", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[100px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[100px]"
                         step="0.01"
                         placeholder="0.00"
                       />
@@ -273,7 +271,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.prestamosIess === 0 ? "" : row.prestamosIess}
                         onChange={(e) => handleUpdate(empleado.id, "prestamosIess", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[130px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[130px]"
                         step="0.01"
                         placeholder="0.00"
                       />
@@ -288,12 +286,12 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         type="number"
                         value={row.depositoIess === 0 ? "" : row.depositoIess}
                         onChange={(e) => handleUpdate(empleado.id, "depositoIess", parseFloat(e.target.value) || 0)}
-                        className="h-9 text-right text-sm min-w-[130px] transition-all focus:ring-2 focus:ring-primary/20"
+                        className="h-9 text-right text-sm min-w-[130px]"
                         step="0.01"
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3 text-right bg-gradient-to-r from-primary/10 to-accent/10 font-mono font-bold text-base">${formatCurrency(row.netoRecibir)}</td>
+                    <td className="p-3 text-right bg-muted font-mono font-bold text-base">${formatCurrency(row.netoRecibir)}</td>
                   </tr>
                 );
               })}

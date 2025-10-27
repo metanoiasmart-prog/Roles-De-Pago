@@ -4,7 +4,6 @@ import DatosModule from "@/components/nomina/DatosModule";
 import NominaModule from "@/components/nomina/NominaModule";
 import RolPagosModule from "@/components/nomina/RolPagosModule";
 import { DatosConfig, Empleado } from "@/types/nomina";
-import { FileSpreadsheet, Users, Calculator } from "lucide-react";
 
 const MESES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -32,9 +31,9 @@ const Index = () => {
   const canAccessRol = canAccessNomina && empleados.length > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-background">
       {activeTab === "datos" ? (
-        <main className="min-h-screen flex items-center justify-center px-6 py-12 animate-fade-in">
+        <main className="min-h-screen flex items-center justify-center px-6 py-12">
           <DatosModule
             datos={datos}
             onUpdate={setDatos}
@@ -43,39 +42,23 @@ const Index = () => {
         </main>
       ) : (
         <>
-          <header className="border-b bg-card/80 backdrop-blur-lg shadow-soft sticky top-0 z-50">
-            <div className="container mx-auto px-6 py-5">
-              <div className="flex items-center gap-4">
-                <div className="p-2 rounded-xl bg-gradient-primary shadow-medium">
-                  <FileSpreadsheet className="h-7 w-7 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    {datos.empresa}
-                  </h1>
-                  <p className="text-sm text-muted-foreground font-medium">
-                    {datos.mes} - Corte: {new Date(datos.fechaCorte).toLocaleDateString("es-ES")}
-                  </p>
-                </div>
+          <header className="border-b bg-card">
+            <div className="container mx-auto px-6 py-4">
+              <div>
+                <h1 className="text-xl font-bold">{datos.empresa}</h1>
+                <p className="text-sm text-muted-foreground">
+                  {datos.mes} - Corte: {new Date(datos.fechaCorte).toLocaleDateString("es-ES")}
+                </p>
               </div>
             </div>
           </header>
 
-          <main className="container mx-auto px-6 py-10">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-              <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 h-14 bg-card shadow-medium border">
-                <TabsTrigger value="datos" className="text-sm gap-2 data-[state=active]:shadow-medium transition-all">
-                  <FileSpreadsheet className="h-5 w-5" />
-                  <span className="font-semibold">Datos</span>
-                </TabsTrigger>
-                <TabsTrigger value="nomina" disabled={!canAccessNomina} className="text-sm gap-2 data-[state=active]:shadow-medium transition-all">
-                  <Users className="h-5 w-5" />
-                  <span className="font-semibold">Nómina</span>
-                </TabsTrigger>
-                <TabsTrigger value="rol" disabled={!canAccessRol} className="text-sm gap-2 data-[state=active]:shadow-medium transition-all">
-                  <Calculator className="h-5 w-5" />
-                  <span className="font-semibold">Rol de Pagos</span>
-                </TabsTrigger>
+          <main className="container mx-auto px-6 py-8">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+              <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 h-12">
+                <TabsTrigger value="datos" className="text-sm">Datos</TabsTrigger>
+                <TabsTrigger value="nomina" disabled={!canAccessNomina} className="text-sm">Nómina</TabsTrigger>
+                <TabsTrigger value="rol" disabled={!canAccessRol} className="text-sm">Rol de Pagos</TabsTrigger>
               </TabsList>
 
               <TabsContent value="datos" className="space-y-4">
