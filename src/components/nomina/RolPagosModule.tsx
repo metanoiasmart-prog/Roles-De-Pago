@@ -63,7 +63,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
           diasMes: datos.diasMes,
           diasTrabajados: datos.diasMes,
           sueldoNominal: emp.sueldoNominal,
-          horas50: 0,
+          horas50%: 0,
           horas100: 0,
           bonificacion: 0,
           viaticos: 0,
