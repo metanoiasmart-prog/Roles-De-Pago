@@ -130,14 +130,14 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 <th className="p-3 text-left whitespace-nowrap min-w-[200px]">Nombre</th>
                 <th className="p-3 text-left whitespace-nowrap min-w-[150px]">Cargo</th>
                 <th className="p-3 text-right whitespace-nowrap">Días Mes</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Días Trabajados.</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Días Trabajados</th>
                 <th className="p-3 text-right border-r whitespace-nowrap min-w-[120px]">Sueldo Nominal</th>
 
                 {/* INGRESOS */}
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Sueldo</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas 50%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas Trabajadas al 50%</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Valor Horas 50%</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas 100%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas Trabajadas al 100%</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Valor Horas 100%</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Bonificación</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Viáticos</th>
