@@ -53,25 +53,27 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold mb-1">Base de Datos de Empleados</h2>
+          <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Base de Datos de Empleados
+          </h2>
           <p className="text-sm text-muted-foreground">
             {empresa} - Gestione la información personal y laboral de cada empleado
           </p>
         </div>
-        <Button onClick={handleAddEmpleado} size="sm" className="gap-2">
+        <Button onClick={handleAddEmpleado} size="default" className="gap-2 shadow-medium hover:shadow-large transition-all">
           <Plus className="h-4 w-4" />
           Nuevo Empleado
         </Button>
       </div>
 
-      <Card className="shadow-lg border-2">
+      <Card className="shadow-large border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-max">
             <thead>
-              <tr className="border-b bg-primary/5">
+              <tr className="border-b bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm">
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap">No.</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[250px]">Nombre Completo</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[150px]">Cédula</th>
@@ -87,27 +89,32 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
             </thead>
             <tbody>
               {empleados.map((empleado, index) => (
-                <tr key={empleado.id} className="border-b hover:bg-table-hover transition-colors">
+                <tr key={empleado.id} className="border-b hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 transition-all duration-200">
                   <td className="p-4 text-sm">{index + 1}</td>
                   <td className="p-4">
                     <Input
                       value={`${empleado.apellidos} ${empleado.nombres}`.trim()}
                       onChange={(e) => {
                         const fullName = e.target.value;
-                        const lastSpaceIndex = fullName.lastIndexOf(' ');
                         
-                        let apellidos = fullName;
-                        let nombres = '';
+                        // Permitir escritura libre sin procesamiento inmediato
+                        const parts = fullName.split(' ').filter(Boolean);
                         
-                        if (lastSpaceIndex > 0) {
-                          apellidos = fullName.substring(0, lastSpaceIndex);
-                          nombres = fullName.substring(lastSpaceIndex + 1);
+                        if (parts.length === 0) {
+                          handleUpdate(empleado.id, "apellidos", "");
+                          handleUpdate(empleado.id, "nombres", "");
+                        } else if (parts.length === 1) {
+                          handleUpdate(empleado.id, "apellidos", parts[0]);
+                          handleUpdate(empleado.id, "nombres", "");
+                        } else {
+                          // El último elemento son los nombres, el resto son apellidos
+                          const nombres = parts[parts.length - 1];
+                          const apellidos = parts.slice(0, -1).join(' ');
+                          handleUpdate(empleado.id, "apellidos", apellidos);
+                          handleUpdate(empleado.id, "nombres", nombres);
                         }
-                        
-                        handleUpdate(empleado.id, "apellidos", apellidos);
-                        handleUpdate(empleado.id, "nombres", nombres);
                       }}
-                      className="h-10 text-sm min-w-[250px]"
+                      className="h-10 text-sm min-w-[250px] transition-all focus:ring-2 focus:ring-primary/20"
                       placeholder="Apellidos Nombres"
                     />
                   </td>
@@ -115,7 +122,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                     <Input
                       value={empleado.cedula}
                       onChange={(e) => handleUpdate(empleado.id, "cedula", e.target.value)}
-                      className="h-10 text-sm min-w-[150px]"
+                      className="h-10 text-sm min-w-[150px] transition-all focus:ring-2 focus:ring-primary/20"
                       placeholder="0000000000"
                     />
                   </td>
@@ -123,7 +130,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                     <Input
                       value={empleado.cargo}
                       onChange={(e) => handleUpdate(empleado.id, "cargo", e.target.value)}
-                      className="h-10 text-sm min-w-[180px]"
+                      className="h-10 text-sm min-w-[180px] transition-all focus:ring-2 focus:ring-primary/20"
                       placeholder="Cargo"
                     />
                   </td>
@@ -131,7 +138,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                     <Input
                       value={empleado.asignacion}
                       onChange={(e) => handleUpdate(empleado.id, "asignacion", e.target.value)}
-                      className="h-10 text-sm min-w-[180px]"
+                      className="h-10 text-sm min-w-[180px] transition-all focus:ring-2 focus:ring-primary/20"
                       placeholder="Asignación"
                     />
                   </td>
@@ -140,14 +147,14 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                       type="number"
                       value={empleado.sueldoNominal}
                       onChange={(e) => handleUpdate(empleado.id, "sueldoNominal", parseFloat(e.target.value) || 0)}
-                      className="h-10 text-sm min-w-[150px]"
+                      className="h-10 text-sm min-w-[150px] transition-all focus:ring-2 focus:ring-primary/20"
                       step="0.01"
                     />
                   </td>
                   <td className="p-4">
                     <Badge
                       variant={empleado.activo ? "default" : "secondary"}
-                      className="cursor-pointer select-none"
+                      className="cursor-pointer select-none transition-all hover:scale-105 shadow-sm"
                       onClick={() => toggleEstado(empleado.id)}
                     >
                       {empleado.activo ? "Activo" : "Inactivo"}
@@ -182,7 +189,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDelete(empleado.id)}
-                      className="h-9 w-9 p-0 hover:bg-destructive/10"
+                      className="h-9 w-9 p-0 hover:bg-destructive/10 hover:text-destructive transition-all"
                     >
                       <X className="h-4 w-4" />
                     </Button>

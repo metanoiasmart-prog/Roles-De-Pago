@@ -43,20 +43,22 @@ export default function DatosModule({ datos, onUpdate, onContinue }: DatosModule
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8">
-      <div className="text-center space-y-3">
-        <div className="flex justify-center mb-4">
-          <div className="rounded-full bg-primary/10 p-4">
-            <FileSpreadsheet className="h-12 w-12 text-primary" />
+    <div className="w-full max-w-4xl mx-auto space-y-8 animate-fade-in">
+      <div className="text-center space-y-4">
+        <div className="flex justify-center mb-6">
+          <div className="rounded-2xl gradient-primary p-6 shadow-large animate-pulse">
+            <FileSpreadsheet className="h-14 w-14 text-white" />
           </div>
         </div>
-        <h1 className="text-4xl font-bold tracking-tight">Sistema de Nómina</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          Sistema de Nómina
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
           Configure los datos generales del período de nómina para comenzar
         </p>
       </div>
 
-      <Card className="p-8 shadow-xl border-2">
+      <Card className="p-10 shadow-large border-2 backdrop-blur-sm bg-card/95 animate-slide-up">
         <div className="space-y-8">
           <div className="space-y-6">
             <div className="space-y-3">
@@ -71,7 +73,7 @@ export default function DatosModule({ datos, onUpdate, onContinue }: DatosModule
                 value={localDatos.empresa}
                 onChange={(e) => handleChange("empresa", e.target.value)}
                 placeholder="Ingrese el nombre de su empresa"
-                className="h-12 text-base"
+                className="h-14 text-base transition-all focus:ring-2 focus:ring-primary/20 shadow-soft"
               />
             </div>
 
@@ -84,12 +86,12 @@ export default function DatosModule({ datos, onUpdate, onContinue }: DatosModule
                   </Label>
                 </div>
                 <Select value={localDatos.mes} onValueChange={(value) => handleChange("mes", value)}>
-                  <SelectTrigger id="mes" className="h-12 text-base">
+                  <SelectTrigger id="mes" className="h-14 text-base transition-all focus:ring-2 focus:ring-primary/20 shadow-soft">
                     <SelectValue placeholder="Seleccione mes" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-popover shadow-large border-2">
                     {MESES.map((mes) => (
-                      <SelectItem key={mes} value={mes} className="text-base">
+                      <SelectItem key={mes} value={mes} className="text-base hover:bg-primary/10 transition-colors">
                         {mes}
                       </SelectItem>
                     ))}
@@ -109,30 +111,30 @@ export default function DatosModule({ datos, onUpdate, onContinue }: DatosModule
                   type="date"
                   value={localDatos.fechaCorte}
                   onChange={(e) => handleChange("fechaCorte", e.target.value)}
-                  className="h-12 text-base"
+                  className="h-14 text-base transition-all focus:ring-2 focus:ring-primary/20 shadow-soft"
                 />
               </div>
             </div>
           </div>
 
-          <div className="pt-6 border-t space-y-4">
-            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-              <span className="text-base font-medium text-muted-foreground">Días del mes:</span>
-              <span className="text-2xl font-bold">{localDatos.diasMes}</span>
+          <div className="pt-8 border-t-2 space-y-5">
+            <div className="flex items-center justify-between p-6 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl shadow-medium backdrop-blur-sm border">
+              <span className="text-lg font-semibold text-foreground">Días del mes:</span>
+              <span className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">{localDatos.diasMes}</span>
             </div>
 
             {isFormComplete(localDatos) ? (
               <Button
                 onClick={handleContinue}
                 size="lg"
-                className="w-full h-12 text-base gap-2"
+                className="w-full h-14 text-lg gap-3 shadow-large hover:shadow-xl transition-all hover:scale-[1.02]"
               >
                 Continuar a Nómina
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-6 w-6" />
               </Button>
             ) : (
-              <div className="p-4 bg-muted/30 border border-dashed rounded-lg">
-                <p className="text-sm text-center text-muted-foreground">
+              <div className="p-6 bg-muted/40 border-2 border-dashed rounded-xl shadow-soft">
+                <p className="text-base text-center text-muted-foreground font-medium">
                   Complete todos los campos para continuar
                 </p>
               </div>
