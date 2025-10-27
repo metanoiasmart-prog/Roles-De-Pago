@@ -127,7 +127,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
               <tr className="border-b bg-muted text-xs">
                 {/* DATOS */}
                 <th className="p-3 text-left whitespace-nowrap">No.</th>
-                <th className="p-3 text-left whitespace-nowrap min-w-[200px]">Nombre</th>
+                <th className="p-3 text-left whitespace-nowrap min-w-[200px]">Nombre Completo</th>
                 <th className="p-3 text-left whitespace-nowrap min-w-[150px]">Cargo</th>
                 <th className="p-3 text-right whitespace-nowrap">Días Mes</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Días Trabajados</th>
