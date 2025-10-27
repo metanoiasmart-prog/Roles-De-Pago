@@ -33,12 +33,33 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {activeTab === "datos" ? (
-        <main className="min-h-screen flex items-center justify-center px-6 py-12">
-          <DatosModule
-            datos={datos}
-            onUpdate={setDatos}
-            onContinue={() => setActiveTab("nomina")}
-          />
+        <main className="min-h-screen bg-white px-6 py-16">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 md:flex-row md:items-center">
+            <div className="relative flex justify-center md:flex-1">
+              <div className="relative w-full max-w-xl">
+                <div className="relative overflow-hidden rounded-[32px] border border-muted bg-muted/40 p-10 shadow-lg">
+                  <div className="absolute -left-16 top-10 h-32 w-32 rounded-full bg-emerald-100 blur-3xl" />
+                  <div className="absolute -right-10 bottom-0 h-36 w-36 rounded-full bg-emerald-200 blur-3xl" />
+                  <img
+                    src="/nomina-landing-illustration.svg"
+                    alt="Ilustración de sistema de nómina"
+                    className="relative z-10 h-auto w-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full md:max-w-md">
+              <div className="rounded-[32px] border border-zinc-200 bg-white px-10 py-12 shadow-xl shadow-emerald-100/60">
+                <DatosModule
+                  datos={datos}
+                  onUpdate={setDatos}
+                  onContinue={() => setActiveTab("nomina")}
+                  variant="landing"
+                />
+              </div>
+            </div>
+          </div>
         </main>
       ) : (
         <>
