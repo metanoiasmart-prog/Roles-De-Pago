@@ -39,8 +39,8 @@ export interface RolPagosRow {
   sueldo: number;
   valorHoras50: number;
   valorHoras100: number;
-  decimoTerceroMensualizado: number;
-  decimoCuartoMensualizado: number;
+  decimoTercero: number;
+  decimoCuarto: number;
   totalGanado: number;
 
   // Descuentos editables

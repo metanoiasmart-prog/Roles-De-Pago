@@ -9,16 +9,14 @@ interface RolPagosModuleProps {
 }
 
 const calcularRolPagos = (empleado: Empleado, row: RolPagosRow, diasMes: number): RolPagosRow => {
-  // Cálculos automáticos según las fórmulas Excel
   const sueldo = (row.sueldoNominal / diasMes) * row.diasTrabajados;
   const valorHoras50 = (row.sueldoNominal / 240) * row.horas50 * 1.5;
   const valorHoras100 = (row.sueldoNominal / 240) * 2 * row.horas100;
 
-  const decimoTerceroMensualizado = (sueldo + valorHoras50 + valorHoras100) / 12;
-  const decimoCuartoMensualizado = ((470 / 240) * 8 * row.diasTrabajados) / 12;
+  const decimoTercero = (sueldo + valorHoras50 + valorHoras100) / 12;
+  const decimoCuarto = ((470 / 240) * 8 * row.diasTrabajados) / 12;
 
-  const totalGanado = sueldo + valorHoras50 + valorHoras100 + row.bonificacion + row.viaticos +
-    decimoTerceroMensualizado + decimoCuartoMensualizado;
+  const totalGanado = sueldo + valorHoras50 + valorHoras100 + row.bonificacion + row.viaticos + decimoTercero + decimoCuarto;
 
   const aportePersonal = (sueldo + valorHoras50 + valorHoras100 + row.bonificacion) * 0.0945;
 
@@ -28,7 +26,7 @@ const calcularRolPagos = (empleado: Empleado, row: RolPagosRow, diasMes: number)
   const subtotal = totalGanado - totalDescuentos;
 
   const valorFondoReserva = empleado.acumulaFondoReserva
-    ? (sueldo + valorHoras50 + valorHoras100) * (1/12)
+    ? (sueldo + valorHoras50 + valorHoras100) / 12
     : 0;
 
   const netoRecibir = subtotal + valorFondoReserva - row.depositoIess;
@@ -38,8 +36,8 @@ const calcularRolPagos = (empleado: Empleado, row: RolPagosRow, diasMes: number)
     sueldo,
     valorHoras50,
     valorHoras100,
-    decimoTerceroMensualizado,
-    decimoCuartoMensualizado,
+    decimoTercero,
+    decimoCuarto,
     totalGanado,
     aportePersonal,
     totalDescuentos,
@@ -70,8 +68,8 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
           sueldo: 0,
           valorHoras50: 0,
           valorHoras100: 0,
-          decimoTerceroMensualizado: 0,
-          decimoCuartoMensualizado: 0,
+          decimoTercero: 0,
+          decimoCuarto: 0,
           totalGanado: 0,
           prestamosEmpleado: 0,
           anticipoSueldo: 0,
@@ -121,10 +119,10 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
           <table className="w-full text-sm min-w-max">
             <thead>
               <tr className="border-b bg-muted">
-                <th colSpan={5} className="text-center p-3 font-bold border-r">DATOS</th>
-                <th colSpan={7} className="text-center p-3 font-bold border-r">INGRESOS</th>
-                <th colSpan={7} className="text-center p-3 font-bold border-r">DESCUENTOS</th>
-                <th colSpan={4} className="text-center p-3 font-bold">LIQUIDACIÓN</th>
+                <th colSpan={6} className="text-center p-3 font-bold border-r">DATOS</th>
+                <th colSpan={10} className="text-center p-3 font-bold border-r">INGRESOS</th>
+                <th colSpan={8} className="text-center p-3 font-bold border-r">DESCUENTOS</th>
+                <th colSpan={6} className="text-center p-3 font-bold">LIQUIDACIÓN</th>
               </tr>
               <tr className="border-b bg-muted text-xs">
                 {/* DATOS */}
@@ -132,15 +130,19 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 <th className="p-3 text-left whitespace-nowrap min-w-[200px]">Nombre</th>
                 <th className="p-3 text-left whitespace-nowrap min-w-[150px]">Cargo</th>
                 <th className="p-3 text-right whitespace-nowrap">Días Mes</th>
-                <th className="p-3 text-right border-r whitespace-nowrap min-w-[100px]">Días Trab.</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Días Trab.</th>
+                <th className="p-3 text-right border-r whitespace-nowrap min-w-[120px]">Sueldo Nominal</th>
 
                 {/* INGRESOS */}
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Sueldo</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas 50%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Valor Horas 50%</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas 100%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Valor Horas 100%</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Bonificación</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Viáticos</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[100px]">13ro</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Décimo Cuarto Mensualizado</th>
                 <th className="p-3 text-right border-r whitespace-nowrap min-w-[130px]">Total Ganado</th>
 
                 {/* DESCUENTOS */}
@@ -150,10 +152,13 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Aporte IESS</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Otros</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Préstamos IESS</th>
-                <th className="p-3 text-right border-r whitespace-nowrap min-w-[130px]">Total Desc.</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Total Desc.</th>
+                <th className="p-3 text-right border-r whitespace-nowrap min-w-[120px]">Subtotal</th>
 
                 {/* LIQUIDACIÓN */}
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Subtotal</th>
+                <th className="p-3 text-center whitespace-nowrap min-w-[100px]">Estado Empleado</th>
+                <th className="p-3 text-center whitespace-nowrap min-w-[120px]">Acumula Fondos</th>
+                <th className="p-3 text-center whitespace-nowrap min-w-[120px]">Mensualiza Décimos</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Fondo Reserva</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Depósito IESS</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[140px]">Neto a Recibir</th>
@@ -171,7 +176,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                     <td className="p-3 font-medium">{`${empleado.apellidos} ${empleado.nombres}`}</td>
                     <td className="p-3 text-muted-foreground">{empleado.cargo}</td>
                     <td className="p-3 text-right">{row.diasMes}</td>
-                    <td className="p-3 border-r">
+                    <td className="p-3">
                       <Input
                         type="number"
                         value={row.diasTrabajados === 0 ? "" : row.diasTrabajados}
@@ -180,6 +185,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0"
                       />
                     </td>
+                    <td className="p-3 text-right border-r bg-muted/30 font-mono">${formatCurrency(row.sueldoNominal)}</td>
 
                     {/* INGRESOS */}
                     <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.sueldo)}</td>
@@ -192,6 +198,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0"
                       />
                     </td>
+                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.valorHoras50)}</td>
                     <td className="p-3">
                       <Input
                         type="number"
@@ -201,6 +208,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0"
                       />
                     </td>
+                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.valorHoras100)}</td>
                     <td className="p-3">
                       <Input
                         type="number"
@@ -221,7 +229,8 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.decimoTerceroMensualizado)}</td>
+                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.decimoTercero)}</td>
+                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.decimoCuarto)}</td>
                     <td className="p-3 text-right bg-muted/30 font-mono font-semibold border-r">${formatCurrency(row.totalGanado)}</td>
 
                     {/* DESCUENTOS */}
@@ -276,10 +285,21 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono font-semibold border-r">${formatCurrency(row.totalDescuentos)}</td>
+                    <td className="p-3 text-right bg-muted/30 font-mono font-semibold">${formatCurrency(row.totalDescuentos)}</td>
+                    <td className="p-3 text-right bg-muted/30 font-mono border-r">${formatCurrency(row.subtotal)}</td>
 
                     {/* LIQUIDACIÓN */}
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.subtotal)}</td>
+                    <td className="p-3 text-center">
+                      <span className={`px-2 py-1 rounded text-xs ${empleado.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                        {empleado.activo ? 'Activo' : 'Inactivo'}
+                      </span>
+                    </td>
+                    <td className="p-3 text-center">
+                      <span className="text-xs">{empleado.acumulaFondoReserva ? 'Sí' : 'No'}</span>
+                    </td>
+                    <td className="p-3 text-center">
+                      <span className="text-xs">{empleado.mensualizaDecimos ? 'Sí' : 'No'}</span>
+                    </td>
                     <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.valorFondoReserva)}</td>
                     <td className="p-3">
                       <Input

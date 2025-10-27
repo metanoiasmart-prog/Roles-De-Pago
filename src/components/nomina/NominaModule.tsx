@@ -93,7 +93,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                   <td className="p-4 text-sm">{index + 1}</td>
                   <td className="p-4">
                     <Input
-                      value={nombreInputs[empleado.id] ?? `${empleado.apellidos} ${empleado.nombres}`.trim()}
+                      value={nombreInputs[empleado.id] !== undefined ? nombreInputs[empleado.id] : `${empleado.apellidos} ${empleado.nombres}`.trim()}
                       onChange={(e) => {
                         const value = e.target.value;
                         setNombreInputs({ ...nombreInputs, [empleado.id]: value });
@@ -101,7 +101,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                       onBlur={(e) => {
                         const fullName = e.target.value.trim();
                         const lastSpace = fullName.lastIndexOf(' ');
-                        
+
                         if (lastSpace > 0) {
                           handleUpdate(empleado.id, "apellidos", fullName.substring(0, lastSpace));
                           handleUpdate(empleado.id, "nombres", fullName.substring(lastSpace + 1));
@@ -109,7 +109,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                           handleUpdate(empleado.id, "apellidos", fullName);
                           handleUpdate(empleado.id, "nombres", "");
                         }
-                        
+
                         const newInputs = { ...nombreInputs };
                         delete newInputs[empleado.id];
                         setNombreInputs(newInputs);
