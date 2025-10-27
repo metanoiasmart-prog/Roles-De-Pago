@@ -53,20 +53,21 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
     onUpdate(updated);
   };
 
-  const handleUpdate = (id: string, field: keyof Empleado, value: any) => {
-    const empleado = empleados.find((e) => e.id === id);
-    if (!empleado) return;
+  const updateEmpleado = (id: string, updates: Partial<Empleado>) => {
+    const updated = empleados.map((emp) =>
+      emp.id === id ? { ...emp, ...updates } : emp
+    );
+    onUpdate(updated);
+  };
 
+  const handleUpdate = (id: string, field: keyof Empleado, value: any) => {
     let updates: Partial<Empleado> = { [field]: value };
 
     if (field === "fechaIngreso") {
       updates.tieneFondoReserva = calcularAplicaFondoReserva(value);
     }
 
-    const updated = empleados.map((emp) =>
-      emp.id === id ? { ...emp, ...updates } : emp
-    );
-    onUpdate(updated);
+    updateEmpleado(id, updates);
   };
 
   const handleDelete = (id: string) => {
@@ -120,20 +121,28 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                         setNombreInputs({ ...nombreInputs, [empleado.id]: value });
                       }}
                       onBlur={(e) => {
-                        const fullName = e.target.value.trim();
-                        const lastSpace = fullName.lastIndexOf(' ');
+                        const fullName = e.target.value.replace(/\s+/g, " ").trim();
 
-                        if (lastSpace > 0) {
-                          handleUpdate(empleado.id, "apellidos", fullName.substring(0, lastSpace));
-                          handleUpdate(empleado.id, "nombres", fullName.substring(lastSpace + 1));
+                        if (fullName === "") {
+                          updateEmpleado(empleado.id, { apellidos: "", nombres: "" });
                         } else {
-                          handleUpdate(empleado.id, "apellidos", fullName);
-                          handleUpdate(empleado.id, "nombres", "");
+                          const nameParts = fullName.split(" ");
+
+                          if (nameParts.length === 1) {
+                            updateEmpleado(empleado.id, { apellidos: nameParts[0], nombres: "" });
+                          } else {
+                            updateEmpleado(empleado.id, {
+                              apellidos: nameParts.slice(0, -1).join(" "),
+                              nombres: nameParts.slice(-1).join(" "),
+                            });
+                          }
                         }
 
-                        const newInputs = { ...nombreInputs };
-                        delete newInputs[empleado.id];
-                        setNombreInputs(newInputs);
+                        setNombreInputs((current) => {
+                          const newInputs = { ...current };
+                          delete newInputs[empleado.id];
+                          return newInputs;
+                        });
                       }}
                       className="h-10 text-sm min-w-[250px]"
                       placeholder="Apellidos Nombres"
