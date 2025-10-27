@@ -18,18 +18,28 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
   const [editingId, setEditingId] = useState<string | null>(null);
   const [nombreInputs, setNombreInputs] = useState<Record<string, string>>({});
 
+  const calcularAplicaFondoReserva = (fechaIngreso: string): boolean => {
+    if (!fechaIngreso) return false;
+    const fechaIngresoDate = new Date(fechaIngreso);
+    const hoy = new Date();
+    const diferenciaMs = hoy.getTime() - fechaIngresoDate.getTime();
+    const diasDiferencia = diferenciaMs / (1000 * 60 * 60 * 24);
+    return diasDiferencia >= 365;
+  };
+
   const handleAddEmpleado = () => {
+    const fechaHoy = new Date().toISOString().split("T")[0];
     const newEmpleado: Empleado = {
       id: `emp-${Date.now()}`,
       apellidos: "",
       nombres: "",
       cargo: "",
       asignacion: "",
-      fechaIngreso: new Date().toISOString().split("T")[0],
+      fechaIngreso: fechaHoy,
       sueldoNominal: 470,
       cedula: "",
       activo: true,
-      tieneFondoReserva: false,
+      tieneFondoReserva: calcularAplicaFondoReserva(fechaHoy),
       acumulaFondoReserva: false,
       mensualizaDecimos: false,
     };
@@ -44,8 +54,17 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
   };
 
   const handleUpdate = (id: string, field: keyof Empleado, value: any) => {
+    const empleado = empleados.find((e) => e.id === id);
+    if (!empleado) return;
+
+    let updates: Partial<Empleado> = { [field]: value };
+
+    if (field === "fechaIngreso") {
+      updates.tieneFondoReserva = calcularAplicaFondoReserva(value);
+    }
+
     const updated = empleados.map((emp) =>
-      emp.id === id ? { ...emp, [field]: value } : emp
+      emp.id === id ? { ...emp, ...updates } : emp
     );
     onUpdate(updated);
   };
@@ -80,8 +99,10 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Cargo</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Asignación</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[150px]">Sueldo Nominal</th>
+                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[140px]">Fecha de Entrada</th>
+                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[140px]">Fecha de Salida</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap">Estado</th>
-                <th className="text-center p-4 text-sm font-bold whitespace-nowrap">Fondo Reserva</th>
+                <th className="text-center p-4 text-sm font-bold whitespace-nowrap">Aplica para Fondo de Reserva</th>
                 <th className="text-center p-4 text-sm font-bold whitespace-nowrap">Acumula Fondo</th>
                 <th className="text-center p-4 text-sm font-bold whitespace-nowrap">Mensualiza Décimos</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap">Acciones</th>
@@ -155,6 +176,22 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                     />
                   </td>
                   <td className="p-4">
+                    <Input
+                      type="date"
+                      value={empleado.fechaIngreso}
+                      onChange={(e) => handleUpdate(empleado.id, "fechaIngreso", e.target.value)}
+                      className="h-10 text-sm min-w-[140px]"
+                    />
+                  </td>
+                  <td className="p-4">
+                    <Input
+                      type="date"
+                      value={empleado.fechaSalida || ""}
+                      onChange={(e) => handleUpdate(empleado.id, "fechaSalida", e.target.value || undefined)}
+                      className="h-10 text-sm min-w-[140px]"
+                    />
+                  </td>
+                  <td className="p-4">
                     <Badge
                       variant={empleado.activo ? "default" : "secondary"}
                       className="cursor-pointer select-none"
@@ -164,11 +201,18 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                     </Badge>
                   </td>
                   <td className="p-4 text-center">
-                    <div className="flex justify-center">
+                    <div className="flex justify-center items-center gap-2">
                       <Switch
                         checked={empleado.tieneFondoReserva}
-                        onCheckedChange={(checked) => handleUpdate(empleado.id, "tieneFondoReserva", checked)}
+                        disabled
+                        className="opacity-100"
                       />
+                      {empleado.tieneFondoReserva && (
+                        <span className="text-xs text-green-600 font-medium">Sí</span>
+                      )}
+                      {!empleado.tieneFondoReserva && (
+                        <span className="text-xs text-muted-foreground">No</span>
+                      )}
                     </div>
                   </td>
                   <td className="p-4 text-center">
