@@ -19,14 +19,21 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
 
   const normalizeFullName = (value: string) => value.replace(/\s+/g, " ").trim();
 
+  const getCombinedFullName = (empleado: Pick<Empleado, "apellidos" | "nombres">) =>
+    normalizeFullName(`${empleado.nombres} ${empleado.apellidos}`);
+
   const splitFullName = (
     fullName: string,
     previous?: Pick<Empleado, "apellidos" | "nombres">
   ): Pick<Empleado, "apellidos" | "nombres"> => {
     const parts = fullName.split(" ");
 
+    if (parts.length === 0) {
+      return { apellidos: "", nombres: "" };
+    }
+
     if (parts.length === 1) {
-      return { apellidos: parts[0], nombres: "" };
+      return { apellidos: "", nombres: parts[0] };
     }
 
     const previousApellidosCount = previous?.apellidos
@@ -37,23 +44,30 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
       : 0;
     const previousTotal = previousApellidosCount + previousNombresCount;
 
+    let apellidosCount = 0;
+
     if (
       previousApellidosCount > 0 &&
       previousNombresCount > 0 &&
       previousTotal <= parts.length
     ) {
-      const apellidos = parts.slice(0, previousApellidosCount).join(" ");
-      const nombres = parts.slice(previousApellidosCount).join(" ");
-      return { apellidos, nombres };
+      apellidosCount = previousApellidosCount;
     }
 
-    if (parts.length === 2) {
-      return { apellidos: parts[0], nombres: parts[1] };
+    if (apellidosCount === 0) {
+      if (parts.length === 2) {
+        apellidosCount = 1;
+      } else {
+        apellidosCount = Math.min(2, parts.length - 1);
+      }
     }
 
-    const defaultApellidosCount = Math.min(2, parts.length - 1);
-    const apellidos = parts.slice(0, defaultApellidosCount).join(" ");
-    const nombres = parts.slice(defaultApellidosCount).join(" ");
+    const nombres = parts.slice(0, parts.length - apellidosCount).join(" ");
+    const apellidos = parts.slice(parts.length - apellidosCount).join(" ");
+
+    if (nombres === "") {
+      return { apellidos: parts[parts.length - 1], nombres: parts.slice(0, -1).join(" ") };
+    }
 
     return { apellidos, nombres };
   };
@@ -68,6 +82,16 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
         if (!validIds.has(id)) {
           delete next[id];
           changed = true;
+        }
+      });
+
+      empleados.forEach((emp) => {
+        if (next[emp.id] === undefined) {
+          const combined = getCombinedFullName(emp);
+          if (combined !== "") {
+            next[emp.id] = combined;
+            changed = true;
+          }
         }
       });
 
@@ -181,7 +205,7 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                       value={
                         nombreInputs[empleado.id] !== undefined
                           ? nombreInputs[empleado.id]
-                          : `${empleado.apellidos} ${empleado.nombres}`.trim()
+                          : getCombinedFullName(empleado)
                       }
                       onChange={(e) => {
                         const value = e.target.value;
