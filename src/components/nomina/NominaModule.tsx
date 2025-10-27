@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,90 +14,6 @@ interface NominaModuleProps {
 }
 
 export default function NominaModule({ empleados, onUpdate, empresa }: NominaModuleProps) {
-  const [nombreInputs, setNombreInputs] = useState<Record<string, string>>({});
-
-  const normalizeFullName = (value: string) => value.replace(/\s+/g, " ").trim();
-
-  const getCombinedFullName = (empleado: Pick<Empleado, "apellidos" | "nombres">) =>
-    normalizeFullName(`${empleado.nombres} ${empleado.apellidos}`);
-
-  const splitFullName = (
-    fullName: string,
-    previous?: Pick<Empleado, "apellidos" | "nombres">
-  ): Pick<Empleado, "apellidos" | "nombres"> => {
-    const parts = fullName.split(" ");
-
-    if (parts.length === 0) {
-      return { apellidos: "", nombres: "" };
-    }
-
-    if (parts.length === 1) {
-      return { apellidos: "", nombres: parts[0] };
-    }
-
-    const previousApellidosCount = previous?.apellidos
-      ? previous.apellidos.trim().split(/\s+/).length
-      : 0;
-    const previousNombresCount = previous?.nombres
-      ? previous.nombres.trim().split(/\s+/).length
-      : 0;
-    const previousTotal = previousApellidosCount + previousNombresCount;
-
-    let apellidosCount = 0;
-
-    if (
-      previousApellidosCount > 0 &&
-      previousNombresCount > 0 &&
-      previousTotal <= parts.length
-    ) {
-      apellidosCount = previousApellidosCount;
-    }
-
-    if (apellidosCount === 0) {
-      if (parts.length === 2) {
-        apellidosCount = 1;
-      } else {
-        apellidosCount = Math.min(2, parts.length - 1);
-      }
-    }
-
-    const nombres = parts.slice(0, parts.length - apellidosCount).join(" ");
-    const apellidos = parts.slice(parts.length - apellidosCount).join(" ");
-
-    if (nombres === "") {
-      return { apellidos: parts[parts.length - 1], nombres: parts.slice(0, -1).join(" ") };
-    }
-
-    return { apellidos, nombres };
-  };
-
-  useEffect(() => {
-    setNombreInputs((current) => {
-      const validIds = new Set(empleados.map((emp) => emp.id));
-      let changed = false;
-      const next = { ...current };
-
-      Object.keys(next).forEach((id) => {
-        if (!validIds.has(id)) {
-          delete next[id];
-          changed = true;
-        }
-      });
-
-      empleados.forEach((emp) => {
-        if (next[emp.id] === undefined) {
-          const combined = getCombinedFullName(emp);
-          if (combined !== "") {
-            next[emp.id] = combined;
-            changed = true;
-          }
-        }
-      });
-
-      return changed ? next : current;
-    });
-  }, [empleados]);
-
   const calcularAplicaFondoReserva = (fechaIngreso: string): boolean => {
     if (!fechaIngreso) return false;
     const fechaIngresoDate = new Date(fechaIngreso);
@@ -153,12 +68,6 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
 
   const handleDelete = (id: string) => {
     onUpdate(empleados.filter((emp) => emp.id !== id));
-    setNombreInputs((current) => {
-      if (current[id] === undefined) return current;
-      const next = { ...current };
-      delete next[id];
-      return next;
-    });
   };
 
   return (
@@ -182,7 +91,8 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
             <thead>
               <tr className="border-b bg-muted">
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap">No.</th>
-                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[250px]">Nombre Completo</th>
+                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[200px]">Apellidos</th>
+                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[200px]">Nombres</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[150px]">Cédula</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Cargo</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Asignación</th>
@@ -202,41 +112,18 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                   <td className="p-4 text-sm">{index + 1}</td>
                   <td className="p-4">
                     <Input
-                      value={
-                        nombreInputs[empleado.id] !== undefined
-                          ? nombreInputs[empleado.id]
-                          : getCombinedFullName(empleado)
-                      }
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNombreInputs((current) => ({
-                          ...current,
-                          [empleado.id]: value,
-                        }));
-                      }}
-                      onBlur={(e) => {
-                        const fullName = normalizeFullName(e.target.value);
-
-                        if (fullName === "") {
-                          updateEmpleado(empleado.id, { apellidos: "", nombres: "" });
-                          setNombreInputs((current) => {
-                            const next = { ...current };
-                            delete next[empleado.id];
-                            return next;
-                          });
-                          return;
-                        }
-
-                        const parsed = splitFullName(fullName, empleado);
-                        updateEmpleado(empleado.id, parsed);
-
-                        setNombreInputs((current) => ({
-                          ...current,
-                          [empleado.id]: fullName,
-                        }));
-                      }}
-                      className="h-10 text-sm min-w-[250px]"
-                      placeholder="Apellidos Nombres"
+                      value={empleado.apellidos}
+                      onChange={(e) => updateEmpleado(empleado.id, { apellidos: e.target.value })}
+                      className="h-10 text-sm min-w-[200px]"
+                      placeholder="Apellidos"
+                    />
+                  </td>
+                  <td className="p-4">
+                    <Input
+                      value={empleado.nombres}
+                      onChange={(e) => updateEmpleado(empleado.id, { nombres: e.target.value })}
+                      className="h-10 text-sm min-w-[200px]"
+                      placeholder="Nombres"
                     />
                   </td>
                   <td className="p-4">
@@ -256,7 +143,10 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                     />
                   </td>
                   <td className="p-4">
-                    <Select value={empleado.asignacion} onValueChange={(value) => handleUpdate(empleado.id, "asignacion", value)}>
+                    <Select
+                      value={empleado.asignacion}
+                      onValueChange={(value) => handleUpdate(empleado.id, "asignacion", value)}
+                    >
                       <SelectTrigger className="h-10 text-sm min-w-[180px]">
                         <SelectValue placeholder="Seleccione" />
                       </SelectTrigger>

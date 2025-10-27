@@ -169,11 +169,16 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 const row = rolPagos[empleado.id];
                 if (!row) return null;
 
+                const nombreCompleto = [empleado.apellidos, empleado.nombres]
+                  .map((part) => part.trim())
+                  .filter(Boolean)
+                  .join(" ");
+
                 return (
                   <tr key={empleado.id} className="hover:bg-muted/50">
                     {/* DATOS */}
                     <td className="p-3 border border-gray-200">{index + 1}</td>
-                    <td className="p-3 border border-gray-200 font-medium">{`${empleado.apellidos} ${empleado.nombres}`}</td>
+                    <td className="p-3 border border-gray-200 font-medium">{nombreCompleto}</td>
                     <td className="p-3 border border-gray-200 text-muted-foreground">{empleado.cargo}</td>
                     <td className="p-3 border border-gray-200 text-right">{row.diasMes}</td>
                     <td className="p-3 border border-gray-200">
