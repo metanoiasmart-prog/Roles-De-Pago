@@ -141,7 +141,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Valor Horas 100%</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Bonificación</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Viáticos</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Decimo Tercero Mensualizado13ro</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">13ro</th>
                 <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Décimo Cuarto Mensualizado</th>
                 <th className="p-3 text-right border-r whitespace-nowrap min-w-[130px]">Total Ganado</th>
 
