@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,9 +14,6 @@ interface NominaModuleProps {
 }
 
 export default function NominaModule({ empleados, onUpdate, empresa }: NominaModuleProps) {
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [nombreInputs, setNombreInputs] = useState<Record<string, string>>({});
-
   const calcularAplicaFondoReserva = (fechaIngreso: string): boolean => {
     if (!fechaIngreso) return false;
     const fechaIngresoDate = new Date(fechaIngreso);
@@ -53,20 +49,21 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
     onUpdate(updated);
   };
 
-  const handleUpdate = (id: string, field: keyof Empleado, value: any) => {
-    const empleado = empleados.find((e) => e.id === id);
-    if (!empleado) return;
+  const updateEmpleado = (id: string, updates: Partial<Empleado>) => {
+    const updated = empleados.map((emp) =>
+      emp.id === id ? { ...emp, ...updates } : emp
+    );
+    onUpdate(updated);
+  };
 
+  const handleUpdate = (id: string, field: keyof Empleado, value: any) => {
     let updates: Partial<Empleado> = { [field]: value };
 
     if (field === "fechaIngreso") {
       updates.tieneFondoReserva = calcularAplicaFondoReserva(value);
     }
 
-    const updated = empleados.map((emp) =>
-      emp.id === id ? { ...emp, ...updates } : emp
-    );
-    onUpdate(updated);
+    updateEmpleado(id, updates);
   };
 
   const handleDelete = (id: string) => {
@@ -94,7 +91,12 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
             <thead>
               <tr className="border-b bg-muted">
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap">No.</th>
-                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[250px]">Nombre Completo</th>
+                <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[260px]">
+                  Nombre Completo
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    (Apellidos y Nombres)
+                  </span>
+                </th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[150px]">Cédula</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Cargo</th>
                 <th className="text-left p-4 text-sm font-bold whitespace-nowrap min-w-[180px]">Asignación</th>
@@ -113,31 +115,20 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                 <tr key={empleado.id} className="border-b hover:bg-muted/50">
                   <td className="p-4 text-sm">{index + 1}</td>
                   <td className="p-4">
-                    <Input
-                      value={nombreInputs[empleado.id] !== undefined ? nombreInputs[empleado.id] : `${empleado.apellidos} ${empleado.nombres}`.trim()}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setNombreInputs({ ...nombreInputs, [empleado.id]: value });
-                      }}
-                      onBlur={(e) => {
-                        const fullName = e.target.value.trim();
-                        const lastSpace = fullName.lastIndexOf(' ');
-
-                        if (lastSpace > 0) {
-                          handleUpdate(empleado.id, "apellidos", fullName.substring(0, lastSpace));
-                          handleUpdate(empleado.id, "nombres", fullName.substring(lastSpace + 1));
-                        } else {
-                          handleUpdate(empleado.id, "apellidos", fullName);
-                          handleUpdate(empleado.id, "nombres", "");
-                        }
-
-                        const newInputs = { ...nombreInputs };
-                        delete newInputs[empleado.id];
-                        setNombreInputs(newInputs);
-                      }}
-                      className="h-10 text-sm min-w-[250px]"
-                      placeholder="Apellidos Nombres"
-                    />
+                    <div className="grid min-w-[260px] gap-2 sm:grid-cols-2">
+                      <Input
+                        value={empleado.apellidos ?? ""}
+                        onChange={(e) => updateEmpleado(empleado.id, { apellidos: e.target.value })}
+                        className="h-10 text-sm"
+                        placeholder="Apellidos"
+                      />
+                      <Input
+                        value={empleado.nombres ?? ""}
+                        onChange={(e) => updateEmpleado(empleado.id, { nombres: e.target.value })}
+                        className="h-10 text-sm"
+                        placeholder="Nombres"
+                      />
+                    </div>
                   </td>
                   <td className="p-4">
                     <Input
@@ -156,7 +147,10 @@ export default function NominaModule({ empleados, onUpdate, empresa }: NominaMod
                     />
                   </td>
                   <td className="p-4">
-                    <Select value={empleado.asignacion} onValueChange={(value) => handleUpdate(empleado.id, "asignacion", value)}>
+                    <Select
+                      value={empleado.asignacion}
+                      onValueChange={(value) => handleUpdate(empleado.id, "asignacion", value)}
+                    >
                       <SelectTrigger className="h-10 text-sm min-w-[180px]">
                         <SelectValue placeholder="Seleccione" />
                       </SelectTrigger>

@@ -116,52 +116,52 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
 
       <Card className="border">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm min-w-max">
+          <table className="w-full text-sm min-w-max border border-gray-200 border-collapse">
             <thead>
-              <tr className="border-b bg-muted">
-                <th colSpan={6} className="text-center p-3 font-bold border-r">DATOS</th>
-                <th colSpan={10} className="text-center p-3 font-bold border-r">INGRESOS</th>
-                <th colSpan={8} className="text-center p-3 font-bold border-r">DESCUENTOS</th>
-                <th colSpan={6} className="text-center p-3 font-bold">LIQUIDACIÓN</th>
+              <tr className="bg-muted">
+                <th colSpan={6} className="text-center p-3 font-bold border border-gray-200">DATOS</th>
+                <th colSpan={10} className="text-center p-3 font-bold border border-gray-200">INGRESOS</th>
+                <th colSpan={8} className="text-center p-3 font-bold border border-gray-200">DESCUENTOS</th>
+                <th colSpan={6} className="text-center p-3 font-bold border border-gray-200">LIQUIDACIÓN</th>
               </tr>
-              <tr className="border-b bg-muted text-xs">
+              <tr className="bg-muted text-xs">
                 {/* DATOS */}
-                <th className="p-3 text-left whitespace-nowrap">No.</th>
-                <th className="p-3 text-left whitespace-nowrap min-w-[200px]">Nombre Completo</th>
-                <th className="p-3 text-left whitespace-nowrap min-w-[150px]">Cargo</th>
-                <th className="p-3 text-right whitespace-nowrap">Días Mes</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Días Trabajados</th>
-                <th className="p-3 text-right border-r whitespace-nowrap min-w-[120px]">Sueldo Nominal</th>
+                <th className="p-3 text-right whitespace-nowrap border border-gray-200">No.</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[200px] border border-gray-200">Nombre Completo</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[150px] border border-gray-200">Cargo</th>
+                <th className="p-3 text-right whitespace-nowrap border border-gray-200">Días Mes</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px] border border-gray-200">Días Trabajados</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Sueldo Nominal</th>
 
                 {/* INGRESOS */}
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Sueldo</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas Trabajadas al 50%</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Valor Horas 50%</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Horas Trabajadas al 100%</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Valor Horas 100%</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Bonificación</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Viáticos</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Decimo Tercero Mensualizado</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Décimo Cuarto Mensualizado</th>
-                <th className="p-3 text-right border-r whitespace-nowrap min-w-[130px]">Total Ganado</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Sueldo</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px] border border-gray-200">Horas Trabajadas al 50%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Valor Horas 50%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px] border border-gray-200">Horas Trabajadas al 100%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Valor Horas 100%</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Bonificación</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Viáticos</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px] border border-gray-200">Decimo Tercero Mensualizado</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Décimo Cuarto Mensualizado</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px] border border-gray-200">Total Ganado</th>
 
                 {/* DESCUENTOS */}
-                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Préstamos a Empleado</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Anticipo Sueldo</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Ret. Relacion Dependencia</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[120px]">Aporte IESS</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[100px]">Otros Descuentos</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Préstamos IESS</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Total Descuentos</th>
-                <th className="p-3 text-right border-r whitespace-nowrap min-w-[120px]">Subtotal</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px] border border-gray-200">Préstamos a Empleado</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Anticipo Sueldo</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Ret. Relacion Dependencia</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Aporte IESS</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[100px] border border-gray-200">Otros Descuentos</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px] border border-gray-200">Préstamos IESS</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px] border border-gray-200">Total Descuentos</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[120px] border border-gray-200">Subtotal</th>
 
                 {/* LIQUIDACIÓN */}
-                <th className="p-3 text-center whitespace-nowrap min-w-[100px]">Estado Empleado</th>
-                <th className="p-3 text-center whitespace-nowrap min-w-[120px]">Acumula Fondos</th>
-                <th className="p-3 text-center whitespace-nowrap min-w-[120px]">Mensualiza Décimos</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Fondo Reserva</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[130px]">Depósito IESS</th>
-                <th className="p-3 text-right whitespace-nowrap min-w-[140px]">Neto a Recibir</th>
+                <th className="p-3 text-center whitespace-nowrap min-w-[100px] border border-gray-200">Estado Empleado</th>
+                <th className="p-3 text-center whitespace-nowrap min-w-[120px] border border-gray-200">Acumula Fondos</th>
+                <th className="p-3 text-center whitespace-nowrap min-w-[120px] border border-gray-200">Mensualiza Décimos</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px] border border-gray-200">Fondo Reserva</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[130px] border border-gray-200">Depósito IESS</th>
+                <th className="p-3 text-right whitespace-nowrap min-w-[140px] border border-gray-200">Neto a Recibir</th>
               </tr>
             </thead>
             <tbody>
@@ -169,14 +169,19 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                 const row = rolPagos[empleado.id];
                 if (!row) return null;
 
+                const nombreCompleto = [empleado.apellidos, empleado.nombres]
+                  .map((part) => part.trim())
+                  .filter(Boolean)
+                  .join(" ");
+
                 return (
-                  <tr key={empleado.id} className="border-b hover:bg-muted/50">
+                  <tr key={empleado.id} className="hover:bg-muted/50">
                     {/* DATOS */}
-                    <td className="p-3">{index + 1}</td>
-                    <td className="p-3 font-medium">{`${empleado.apellidos} ${empleado.nombres}`}</td>
-                    <td className="p-3 text-muted-foreground">{empleado.cargo}</td>
-                    <td className="p-3 text-right">{row.diasMes}</td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200">{index + 1}</td>
+                    <td className="p-3 border border-gray-200 font-medium">{nombreCompleto}</td>
+                    <td className="p-3 border border-gray-200 text-muted-foreground">{empleado.cargo}</td>
+                    <td className="p-3 border border-gray-200 text-right">{row.diasMes}</td>
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.diasTrabajados === 0 ? "" : row.diasTrabajados}
@@ -185,11 +190,11 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0"
                       />
                     </td>
-                    <td className="p-3 text-right border-r bg-muted/30 font-mono">${formatCurrency(row.sueldoNominal)}</td>
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.sueldoNominal)}</td>
 
                     {/* INGRESOS */}
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.sueldo)}</td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.sueldo)}</td>
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.horas50 === 0 ? "" : row.horas50}
@@ -198,8 +203,8 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.valorHoras50)}</td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.valorHoras50)}</td>
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.horas100 === 0 ? "" : row.horas100}
@@ -208,8 +213,8 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.valorHoras100)}</td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.valorHoras100)}</td>
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.bonificacion === 0 ? "" : row.bonificacion}
@@ -219,7 +224,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.viaticos === 0 ? "" : row.viaticos}
@@ -229,12 +234,12 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.decimoTercero)}</td>
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.decimoCuarto)}</td>
-                    <td className="p-3 text-right bg-muted/30 font-mono font-semibold border-r">${formatCurrency(row.totalGanado)}</td>
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.decimoTercero)}</td>
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.decimoCuarto)}</td>
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono font-semibold">${formatCurrency(row.totalGanado)}</td>
 
                     {/* DESCUENTOS */}
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.prestamosEmpleado === 0 ? "" : row.prestamosEmpleado}
@@ -244,7 +249,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.anticipoSueldo === 0 ? "" : row.anticipoSueldo}
@@ -254,7 +259,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.retencionRenta === 0 ? "" : row.retencionRenta}
@@ -264,8 +269,8 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.aportePersonal)}</td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.aportePersonal)}</td>
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.otrosDescuentos === 0 ? "" : row.otrosDescuentos}
@@ -275,7 +280,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.prestamosIess === 0 ? "" : row.prestamosIess}
@@ -285,23 +290,23 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono font-semibold">${formatCurrency(row.totalDescuentos)}</td>
-                    <td className="p-3 text-right bg-muted/30 font-mono border-r">${formatCurrency(row.subtotal)}</td>
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono font-semibold">${formatCurrency(row.totalDescuentos)}</td>
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.subtotal)}</td>
 
                     {/* LIQUIDACIÓN */}
-                    <td className="p-3 text-center">
+                    <td className="p-3 border border-gray-200 text-center">
                       <span className={`px-2 py-1 rounded text-xs ${empleado.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                         {empleado.activo ? 'Activo' : 'Inactivo'}
                       </span>
                     </td>
-                    <td className="p-3 text-center">
+                    <td className="p-3 border border-gray-200 text-center">
                       <span className="text-xs">{empleado.acumulaFondoReserva ? 'Sí' : 'No'}</span>
                     </td>
-                    <td className="p-3 text-center">
+                    <td className="p-3 border border-gray-200 text-center">
                       <span className="text-xs">{empleado.mensualizaDecimos ? 'Sí' : 'No'}</span>
                     </td>
-                    <td className="p-3 text-right bg-muted/30 font-mono">${formatCurrency(row.valorFondoReserva)}</td>
-                    <td className="p-3">
+                    <td className="p-3 border border-gray-200 text-right bg-muted/30 font-mono">${formatCurrency(row.valorFondoReserva)}</td>
+                    <td className="p-3 border border-gray-200">
                       <Input
                         type="number"
                         value={row.depositoIess === 0 ? "" : row.depositoIess}
@@ -311,7 +316,7 @@ export default function RolPagosModule({ empleados, datos }: RolPagosModuleProps
                         placeholder="0.00"
                       />
                     </td>
-                    <td className="p-3 text-right bg-muted font-mono font-bold text-base">${formatCurrency(row.netoRecibir)}</td>
+                    <td className="p-3 border border-gray-200 text-right bg-muted font-mono font-bold text-base">${formatCurrency(row.netoRecibir)}</td>
                   </tr>
                 );
               })}
